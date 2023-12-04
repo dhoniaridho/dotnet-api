@@ -1,6 +1,6 @@
 using IUJP.Modules.Post.Services;
 
-namespace UIJP.Modules.Post
+namespace UIJP.Modules.Post.Module
 {
     public static class PostModule
     {

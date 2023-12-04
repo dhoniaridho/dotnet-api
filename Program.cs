@@ -1,11 +1,9 @@
-using UIJP.Modules.Post;
-using UIJP.Modules.User;
+using UIJP.Modules.Post.Module;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddUserModule();
 builder.Services.AddPostModule();
 
 // Configure AutoMapper

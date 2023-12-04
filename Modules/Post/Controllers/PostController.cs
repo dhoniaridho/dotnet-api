@@ -1,8 +1,9 @@
+using System.Net;
 using IUJP.Modules.Post.Models;
 using IUJP.Modules.Post.Services;
 using Microsoft.AspNetCore.Mvc;
+using UIJP;
 using UIJP.Modules.Post.Dtos;
-using UIJP.Modules.Post.Entities;
 
 namespace IUJP.Modules.Post.Controller
 {
@@ -16,9 +17,15 @@ namespace IUJP.Modules.Post.Controller
 
 
         [HttpGet("{id}")]
-        public PostModel Get(string id)
+        public IActionResult Get(string id)
         {
-            return _postService.GetOne(id);
+            var data = _postService.GetOne(id);
+
+            if (data == null) return NotFound(
+                new ResponsePipe(HttpStatusCode.NotFound, "Post not found")
+            );
+
+            return new ResponsePipe(HttpStatusCode.OK, "Success", data);
         }
 
         [HttpGet]

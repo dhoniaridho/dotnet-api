@@ -1,46 +1,60 @@
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using UIJP.Modules.Post.Entities;
+using IUJP.Modules.Post.Models;
+using UIJP.Modules.Post.Dtos;
+
 
 namespace IUJP.Modules.Post.Services
 {
     public interface IPostService
     {
-        PostEntity GetOne(string id);
-        IEnumerable<PostEntity> GetAll();
+        PostModel GetOne(string id);
+        IEnumerable<PostModel> GetAll();
+        PostModel CreateOne(CreatePostDto createPostDto);
+        void DeleteOne(string id);
     }
 
 
-    public class PostService : IPostService
+    public class PostService(AppDbContext dbContext) : IPostService
     {
-        public PostEntity GetOne(string id)
+
+        private readonly AppDbContext _dbContext = dbContext;
+
+        public PostModel GetOne(string id)
         {
-            var post = new PostEntity
-            {
-                Id = id,
-                Title = "Hello World",
-                CreatedAt = DateTime.Now
-            };
-            return post;
+            var post = _dbContext.Posts.Where(x => x.Id == id).FirstOrDefault();
+            return post ?? throw new Exception("Post not found");
         }
 
-        public IEnumerable<PostEntity> GetAll()
+        public IEnumerable<PostModel> GetAll()
         {
 
-            var list = new List<PostEntity>();
-
-            for (int i = 0; i < 10; i++)
-            {
-                list.Add(new PostEntity
-                {
-                    Id = i.ToString(),
-                    Title = "Hello World",
-                    CreatedAt = DateTime.Now
-                });
-            }
-
+            var list = _dbContext.Posts.ToList();
             return list;
         }
 
+        public PostModel CreateOne(CreatePostDto createPostDto)
+        {
+            var post = new PostModel
+            {
+                Title = createPostDto.Title,
+                CreatedAt = DateTime.Now,
+                UpdatedAt = DateTime.Now
+            };
+
+            _dbContext.Posts.Add(
+                post
+            );
+
+            _dbContext.SaveChanges();
+
+            return post;
+        }
+
+        public void DeleteOne(string id)
+        {
+            var post = _dbContext.Posts.Where(x => x.Id == id).FirstOrDefault() ?? throw new Exception("Post not found");
+            _dbContext.Posts.Remove(post);
+            _dbContext.SaveChanges();
+        }
     }
 }
 

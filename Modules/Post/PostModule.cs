@@ -6,6 +6,9 @@ namespace UIJP.Modules.Post
     {
         public static IServiceCollection AddPostModule(this IServiceCollection services)
         {
+
+            services.AddDbModule();
+
             // Register controllers
             services.AddControllers();
             // Register services

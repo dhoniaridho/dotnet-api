@@ -1,3 +1,5 @@
+using UIJP.Modules.User.Entities;
+
 namespace UIJP.Modules.Post.Entities
 {
     public class PostEntity
@@ -5,5 +7,8 @@ namespace UIJP.Modules.Post.Entities
         public required string Id { set; get; }
         public required string Title { set; get; }
         public required DateTime CreatedAt { set; get; }
+
+        public required UserEntity User { set; get; }
+        
     }
 }
